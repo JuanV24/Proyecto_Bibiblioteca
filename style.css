@@ -1,0 +1,62 @@
+body{
+    background-color: bisque;
+}
+
+/*Estilizando el titulo*/
+.titulo{
+    color: blue;
+    text-align: center;
+}
+.Subtitulo{
+    color: gray;
+    text-align: center;
+}
+
+.logo{
+    max-width: 100px;
+    display: block;
+    margin: auto;
+    margin-bottom: 2rem;
+}
+
+/*Estilizando contenedores*/
+.contenedor {
+    display: grid; /* Activa el modelo de flexbox */
+    grid-template-columns: auto auto ;
+    grid-column-gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.Formulario{
+    display:flex;
+    flex-direction: column;
+    margin-left: 2rem;
+}
+
+.Formulario label{
+    text-align: justify;
+    color: rgb(86, 132, 148);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-top: 1rem;
+}
+
+.Formulario input{
+    max-width: 500px;
+}
+
+.Formulario select
+{
+    max-width: 500px;
+}
+
+.Formulario button{
+    max-width: 100px;
+    margin-top: 1rem;
+}
+
+/*.table{
+    max-width: 40rem;
+    padding-left: 5rem !important;
+}*/
+
+
