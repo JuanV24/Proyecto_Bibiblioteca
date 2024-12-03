@@ -24,7 +24,7 @@ if (isset($_POST['CreacionLibro'])) {
         $nombreCliente = $_POST['ClienteName'];
         $fecha = $_POST['Fecha'];
 
-        $libroNuevo = new Biblioteca($id, $libro, $descripcion,$categoria, $dispo, $nombreCliente, $fecha);
+        $libroNuevo = new Biblioteca($id, $libro, $descripcion, $categoria, $dispo, $nombreCliente, $fecha);
         $Libros[] = $libroNuevo;
 
         $_SESSION['Libros'] = $Libros;
@@ -201,58 +201,69 @@ function GetIDLibro($id, $Libros)
         </main>
     </div>
 
-                    <!--Contendor para prestamos y filtrar informacion-->
-        <h1 class="titulo" >Prestamo de libro</h1>
-        <h2 class="Subtitulo">En este apartado podras reservar tu libro favorito</h2>
+    <!--Contendor para prestamos y filtrar informacion-->
+    <h1 class="titulo">Prestamo de libro</h1>
+    <h2 class="Subtitulo">En este apartado podras reservar tu libro favorito</h2>
 
     <div class="contenedor">
-                       <form class="Formulario col-7"  method="POST">
 
-                    <label>Filtrar Por categoria</label>
-                    <select>
-                        <option value="Comedia">Comedia</option>
-                        <option value="Drama">Drama</option>
-                        <option value="Ciencia Ficcion">Ciencia Ficcion</option>
-                    </select>
+        <form class="Formulario col-7" method="POST">
 
-                    <label>Nombre del prestamista:</label>
-                    <input type="text" name="ClienteName">
+            <label>Nombre del prestamista:</label>
+            <input type="text" name="ClienteName">
 
-                    <label>Fecha de prestamo:</label>
-                    <input type="date" name="Fecha">
-                </form>
+            <label>Fecha de prestamo:</label>
+            <input type="date" name="Fecha">
 
-                    <!---Apartado donde se filtrara la información-->
-                <main class="table col-5">
-                    <table class="table table-striped" >
-                        <thead>
-                            <th>Libro</th>
-                            <th>Descripcion</th>
-                            <th>Categoria</th>
-                            <th>Cliente</th>
-                            <th>Fecha de prestamo</th>
-                            <th>Acciones</th>
-                        </thead>
-                        <tbody>
-                            <?php
-                            foreach($Libros as $Libro):
-                            ?>
-                            <tr>
-                            <td><?php echo $Libro->GetLibro()?></td>
-                            <td><?php echo $Libro->GetDescripcion()?></td>
-                            <td><?php echo $Libro->GetCategoria()?></td>
-                            <td><?php echo $Libro->GetNombreCliente()?></td>
-                            <td><?php echo $Libro->GetFecha()?></td>
+            <button type="submit">Enviar información</button>
+        </form>
+
+        <!---Apartado donde se filtrara la información-->
+        <main class="table col-5">
+
+            <form class="Formulario col-7" method="POST">
+
+                <label>Filtrar Por categoria</label>
+                <select name="Categoria">
+                    <option value="Comedia">Comedia</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Ciencia Ficcion">Ciencia Ficcion</option>
+                </select>
+
+                <button type="submit">Filtrar categoria</button>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <th>Libro</th>
+                    <th>Descripcion</th>
+                    <th>Categoria</th>
+                    <th>Cliente</th>
+                    <th>Fecha de prestamo</th>
+                    <th>Acciones</th>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach ($Libros as $Libro):
+                        if($_POST['Categoria'] == $Libro->GetCategoria() && $Libro->GetDispo() == "Si"){
+                    ?>
+                        <tr>
+                            <td><?php echo $Libro->GetLibro() ?></td>
+                            <td><?php echo $Libro->GetDescripcion() ?></td>
+                            <td><?php echo $Libro->GetCategoria() ?></td>
+                            <td><?php echo $Libro->GetNombreCliente() ?></td>
+                            <td><?php echo $Libro->GetFecha() ?></td>
                             <td><a href="?AgregandoCliente=<?php print "{$Libro->GetId()}" ?>">Agregar</a>
-                                <a href="?EliminandoCliente=<?php print "{$Libro->GetId()}" ?>">Eliminar</a></td>
-                            </tr>
-                            <?php
-                            endforeach?>
-                        </tbody>
-                    </table>
+                                <a href="?EliminandoCliente=<?php print "{$Libro->GetId()}" ?>">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php
+                    }endforeach ?>
+                </tbody>
+            </table>
 
-                </main>
- 
+        </main>
+
 
     </div>
 
