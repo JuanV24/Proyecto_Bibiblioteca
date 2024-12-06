@@ -44,7 +44,7 @@ if (isset($_POST['EdicionLibro'])) {
             $libroNuevo->SetDispo($_POST['Dispo']);
         }
 
-        header('Location: /PHP/POO/biblioteca_project/');
+        header('Location: /PHP/POO/Proyecto_Biblioteca/');
     }
 }
 
@@ -59,8 +59,45 @@ if (isset($_GET['Eliminar'])) {
         }
     }
     $_SESSION['Libros'] = $Libros;
-    header('Location: /PHP/POO/biblioteca_project/');
+    header('Location: /PHP/POO/Proyecto_Biblioteca/');
 }
+
+
+//Funcion para agregar un prestamo(Modificando los campos)
+if (isset($_GET['AgregandoCliente'])) {
+    $id = $_GET['AgregandoCliente'];
+
+    foreach ($Libros as $libro) {
+        if ($libro->GetId() == $id) {
+            if (isset($_POST['ClienteName'], $_POST['Fecha'])) {
+                $libro->SetNombreCliente($_POST['ClienteName']);
+                $libro->SetFecha($_POST['Fecha']);
+                break;
+            }
+        }
+    }
+    $_SESSION['Libros'] = $Libros;
+
+}
+
+//Funcion para eliminar el prestamo(Modificando a los valores predeterminados)
+if (isset($_GET['EliminandoCliente'])) {
+    $id = $_GET['EliminandoCliente'];
+
+    foreach ($Libros as $libro) {
+        if ($libro->GetId() == $id) {
+            $libro->SetNombreCliente('-');
+            $libro->SetFecha('-');
+            break;
+        }
+    }
+
+    $_SESSION['Libros'] = $Libros;
+
+    header('Location: /PHP/POO/Proyecto_Biblioteca/');
+
+}
+
 
 
 
@@ -207,16 +244,29 @@ function GetIDLibro($id, $Libros)
 
     <div class="contenedor">
 
-        <form class="Formulario col-7" method="POST">
+    <?php if (isset($_GET['AgregandoCliente'])) {
+    $LibroEditable = GetIDLibro($_GET['AgregandoCliente'], $Libros);
 
+    if (!$LibroEditable) {
+        echo "<p>Error: No se encontró un libro con el ID proporcionado.</p>";
+    } else { ?>
+        <form action="" class="Formulario col-7" method="POST">
             <label>Nombre del prestamista:</label>
-            <input type="text" name="ClienteName">
+            <input type="text" name="ClienteName" value="<?php echo $LibroEditable->GetNombreCliente(); ?>">
 
-            <label>Fecha de prestamo:</label>
-            <input type="date" name="Fecha">
+            <label>Fecha de préstamo:</label>
+            <input type="date" name="Fecha" value="<?php echo $LibroEditable->GetFecha(); ?>">
+
+            <input type="hidden" name="id" value="<?php echo $LibroEditable->GetId(); ?>">
 
             <button type="submit">Enviar información</button>
         </form>
+    <?php }
+} else {
+    echo "<p>Por favor, selecciona un libro para agendar un préstamo.</p>";
+}
+?>
+
 
         <!---Apartado donde se filtrara la información-->
         <main class="table col-5">
@@ -244,8 +294,9 @@ function GetIDLibro($id, $Libros)
                 </thead>
                 <tbody>
                     <?php
+                    $categoriaFiltro = $_POST['Categoria'] ?? null;
                     foreach ($Libros as $Libro):
-                        if($_POST['Categoria'] == $Libro->GetCategoria() && $Libro->GetDispo() == "Si"){
+                        if (($categoriaFiltro === null || $Libro->GetCategoria() == $categoriaFiltro) && $Libro->GetDispo() == "Si") {
                     ?>
                         <tr>
                             <td><?php echo $Libro->GetLibro() ?></td>
